@@ -13,11 +13,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "Utils/utils.h"
 
 /*
  * 
  */
 int main(int argc, char** argv) {
+    initRandom();
 
     return (EXIT_SUCCESS);
 }
