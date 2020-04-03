@@ -32,10 +32,15 @@
 
 `
     typedef struct sala local, *plocal;
+    
     struct sala {
+    
       int id;         // id numérico do local
+      
       int capacidade; // capacidade máxima
+      
       int liga[3];    // id das ligações (-1 nos casos não usados)
+      
     };
  `
 
