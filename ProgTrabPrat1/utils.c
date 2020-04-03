@@ -1,11 +1,8 @@
 // Trabalho Pratico Programacao - LEI
 // DEIS-ISEC 2019-2020
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 #include "utils.h"
+
 
 void initRandom(){
     srand(time(NULL));
