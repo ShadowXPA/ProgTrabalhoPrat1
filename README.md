@@ -29,6 +29,7 @@
   O espaço em que decorre a siumulação é constituído por um conjunto de locais interligados entre si, por exemplo, várias salas de um mesmo edifício.
   Cada local tem um ID numérico positivo (único), uma capacidade máxima e algumas ligações diretas a outros locais. No máximo, cada local pode ter 3 ligações.
   Os possíveis espaços para realizar a simulação estão armazenados em ficheiros binários (1 ficheiro por espaço). Cada um destes ficheiros contém várias estruturas do tipo local, uma para cada um dos locais existentes nesse espaço:
+
   `typedef struct sala local, *plocal;`
 
   `struct sala {`
@@ -40,6 +41,7 @@
     `int liga[3];    // id das ligações (-1 nos casos não usados)`
   
   `};`
+
   No início da execução, o utilizador indica o nome do ficheiro onde se encontra a informação do espaço a usar. Antes de se iniciar a fase de simulação, esta informação é obrigatoriamente transferida para um vetor dinâmico de estruturas.
   O programa deve validar a organização do espaço: todos os locais devem ter ids positivos únicos e as ligações devem estar corretas (por exemplo, se o espaço A tiver ligação para o espaço B, então B também deve ter ligação para A). Caso exista algum erro detetado na validação, deverá ser apresentada uma mensagem adequada e o programa termina sem iniciar a fase de simulação.
   Juntamente com o enunciado são disponibilizados 3 ficheiros binários com possíveis espaços para simulação. São apenas exemplos e durante a defesa poderão ser utilizados outros ficheiros, desde que sigam a mesma organização indicada neste enunciado.
