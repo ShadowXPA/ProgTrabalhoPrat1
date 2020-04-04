@@ -80,8 +80,8 @@ int main(int argc, char *argv[], char **envp) {
     printf("\n\n Initializing simulation...\n");
 
     free(sim_cfg.capacity);
-    free_people(people);
     free_places(places);
+    free_people(people);
     scanf("%~[^\n]");
     return (EXIT_SUCCESS);
 }
