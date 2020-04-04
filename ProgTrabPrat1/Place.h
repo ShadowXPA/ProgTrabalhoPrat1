@@ -9,13 +9,6 @@
  *
  */
 
-/* 
- * File:   Local.h
- * Author: Pedro dos Santos Alves
- *
- * Created on April 3, 2020, 5:08 PM
- */
-
 #ifndef LOCAL_H
 #define LOCAL_H
 

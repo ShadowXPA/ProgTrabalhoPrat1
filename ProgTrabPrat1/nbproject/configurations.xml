@@ -14,7 +14,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Local.c</itemPath>
+      <itemPath>Place.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>utils.c</itemPath>
     </logicalFolder>
@@ -34,18 +34,19 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <cTool>
           <standard>3</standard>
+          <commandlineTool>gcc</commandlineTool>
         </cTool>
       </compileType>
-      <item path="Local.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="Local.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Place.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -75,9 +76,9 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="Local.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="Local.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Place.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>

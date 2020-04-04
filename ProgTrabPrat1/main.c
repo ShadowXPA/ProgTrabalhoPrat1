@@ -9,26 +9,17 @@
  *
  */
 
-/* 
- * File:   main.c
- * Author: Pedro dos Santos Alves
- *
- * Created on April 2, 2020, 4:20 PM
- */
-
 #include <string.h>
-#include <locale.h>
 #include "utils.h"
-#include "Local.h"
+#include "Place.h"
 
 #define MAX_FILENAME 256
 
 void prog_exiting() {
-    printf("\n----------------------\nO programa irá terminar.\n----------------------\n");
+    printf("\n----------------------\nThe program will close.\n----------------------\n");
 }
 
 int main(int argc, char *argv[], char **envp) {
-    setlocale(LC_ALL, "Portuguese");
     atexit(prog_exiting);
     initRandom();
     char filename[MAX_FILENAME];
@@ -38,20 +29,25 @@ int main(int argc, char *argv[], char **envp) {
         snprintf(filename, strlen(argv[1]) + 1, "%s", argv[1]);
     } else {
         // Ask for filename
-        printf("Introduza o nome da pasta:\n > ");
+        printf("Input the name of the place file:\n > ");
         scanf("%[^\n]", &filename);
     }
 
+    // Initialize places
+    printf("\n\n Initializing...\n Reading places file...\n");
     places = init_list_place(filename);
     if (places == NULL) {
-        printf("Os locais não foram inicializados com sucesso!\n");
+        printf("The places weren't initialized with success!\n");
         exit(-1);
     }
-
     view_list_place(places);
 
+    // Initialize People
+
+    // Simulation
+    printf("\n\n Initializing simulation...\n");
+    free(places->place);
     free(places);
     scanf("%~[^\n]");
     return (EXIT_SUCCESS);
 }
-
