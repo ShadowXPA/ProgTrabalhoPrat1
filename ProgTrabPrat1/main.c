@@ -79,6 +79,7 @@ int main(int argc, char *argv[], char **envp) {
     // Start Simulation
     printf("\n\n Initializing simulation...\n");
 
+    free(sim_cfg.capacity);
     free_people(people);
     free_places(places);
     scanf("%~[^\n]");
