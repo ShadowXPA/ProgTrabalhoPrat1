@@ -42,11 +42,10 @@ extern "C" {
     bool _evaluate_list_id(const ListPlace *places);
     bool _evaluate_list_connection(const ListPlace *places);
     bool _evaluate_list_connection_2(const ListPlace *places);
-
+    uint32_t get_max_capacity(const ListPlace *places);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* PLACE_H */
-

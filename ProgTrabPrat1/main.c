@@ -9,7 +9,6 @@
  *
  */
 
-#include "utils.h"
 #include "Person.h"
 
 #define MAX_FILENAME 256
@@ -23,6 +22,7 @@ int main(int argc, char *argv[], char **envp) {
     initRandom();
     char filename[MAX_FILENAME];
     char filename2[MAX_FILENAME];
+    Config sim_cfg;
     ListPlace *places = NULL;
     ListPerson *people = NULL;
 
@@ -62,8 +62,23 @@ int main(int argc, char *argv[], char **envp) {
     }
     print_people(people);
 
-    // Simulation
+    // Distribute the people and init configuration
+    printf("\n\n Initializing the simulation configuration and distributing the people.\n");
+    sim_cfg.days = 0;
+    sim_cfg.capacity = calloc(places->size, sizeof(Config));
+    if (sim_cfg.capacity == NULL) {
+        printf("Couldn't allocate memory for auxiliary data.\n");
+        free_places(places);
+        free_people(people);
+        exit(-1);
+    }
+    sim_cfg.max_capacity = get_max_capacity(places);
+    distribute_people(people, &sim_cfg, places);
+    print_cfg(&sim_cfg, places->size);
+
+    // Start Simulation
     printf("\n\n Initializing simulation...\n");
+
     free_people(people);
     free_places(places);
     scanf("%~[^\n]");

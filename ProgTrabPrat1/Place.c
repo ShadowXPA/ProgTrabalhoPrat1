@@ -83,13 +83,13 @@ bool evaluate_places(const ListPlace *places) {
 }
 
 bool _evaluate_list_id(const ListPlace *places) {
-    for (int i = 0; i < places->size; i++) {
+    for (uint32_t i = 0; i < places->size; i++) {
         // Positive ID
         if (places->place[i].id < 0)
             return false;
         else
             // Unique ID
-            for (int j = i + 1; j < places->size; j++) {
+            for (uint32_t j = i + 1; j < places->size; j++) {
                 if (places->place[i].id == places->place[j].id)
                     return false;
             }
@@ -107,10 +107,10 @@ bool _evaluate_list_connection(const ListPlace *places) {
      * else, it doesn't need to keep searching.
      * In the end if all connections are OKAY, return true
      */
-    for (int i = 0; i < places->size; i++) {
+    for (uint32_t i = 0; i < places->size; i++) {
         for (int j = 0; j < MAX_CONNECTIONS; j++) {
             if (places->place[i].connection[j] != -1) {
-                for (int k = 0; k < places->size; k++) {
+                for (uint32_t k = 0; k < places->size; k++) {
                     if (i != k) {
                         if (places->place[i].connection[j] == places->place[k].id) {
                             bool has_connection = false;
@@ -135,7 +135,7 @@ bool _evaluate_list_connection(const ListPlace *places) {
 }
 
 bool _evaluate_list_connection_2(const ListPlace *places) {
-    for (int i = 0; i < places->size; i++) {
+    for (uint32_t i = 0; i < places->size; i++) {
         for (int j = 0; j < MAX_CONNECTIONS - 1; j++) {
             for (int k = j + 1; k < MAX_CONNECTIONS; k++) {
                 // Repeated connections
@@ -171,4 +171,14 @@ void print_places(const ListPlace *places) {
 void free_places(ListPlace *places) {
     free(places->place);
     free(places);
+}
+
+uint32_t get_max_capacity(const ListPlace *places) {
+    uint32_t tmp = 0;
+
+    for (uint32_t i = 0; i < places->size; i++) {
+        tmp += places->place[i].capacity;
+    }
+
+    return tmp;
 }

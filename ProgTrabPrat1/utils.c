@@ -3,7 +3,6 @@
 
 #include "utils.h"
 
-
 void initRandom(){
     srand(time(NULL));
 }

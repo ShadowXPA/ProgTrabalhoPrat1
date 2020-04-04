@@ -57,6 +57,8 @@ ListPerson *init_people(const char *filename) {
                     // Days
                     person.days = atoi(token);
                     break;
+                default:
+                    break;
             }
             token = strtok(NULL, s);
             i++;
@@ -160,5 +162,22 @@ void free_people(ListPerson *people) {
         tmp = people;
         people = people->next;
         free(tmp);
+    }
+}
+
+
+// People + Places
+
+void distribute_people(ListPerson *people, Config *cfg, const ListPlace *places) {
+    ListPerson *current = people;
+
+    while (current != NULL && get_real_capacity(cfg, places->size) < cfg->max_capacity) {
+        uint16_t i = 0;
+        do {
+            i = (uint16_t)intUniformRnd(0, places->size - 1);
+        } while (cfg->capacity[i] >= places->place[i].capacity);
+        current->person.place = &places->place[i];
+        cfg->capacity[i]++;
+        current = current->next;
     }
 }

@@ -1,0 +1,101 @@
+PauloPires1  23  S
+SofiaA  23  S
+Tomas111   12   I
+PauloPires2   67    D   10
+MarcoMarquesAAA   40    I
+Zulmira2A    17 S
+Olivia1     12  S
+SamuelSimoes   56   D   1
+SandraS       56    D   1
+HugoA        20    D  3
+HugoB        25   D   10
+HugoC       14   D    5
+PauloAlves123   34   D   4
+Carlos1     20   D    3
+CarlaCardoso  34   D   7
+SandraMotaA1   24  S 
+PedroPedra   27    S
+DianaD      89    S
+TobiasF    98    S
+LeonardoL  10   S
+0PauloPires1  23  S
+0SofiaA  23  S
+0Tomas111   12   I
+0PauloPires2   67    D   10
+0MarcoMarquesAAA   40    I
+0Zulmira2A    17 S
+0Olivia1     12  S
+0SamuelSimoes   56   D   1
+0SandraS       56    D   1
+0HugoA        20    D  3
+0HugoB        25   D   10
+0HugoC       14   D    5
+0PauloAlves123   34   D   4
+0Carlos1     20   D    3
+0CarlaCardoso  34   D   7
+0SandraMotaA1   24  S 
+0PedroPedra   27    S
+0DianaD      89    S
+0TobiasF    98    S
+0LeonardoL  10   S
+1PauloPires1  23  S
+1SofiaA  23  S
+1Tomas111   12   I
+1PauloPires2   67    D   10
+1MarcoMarquesAAA   40    I
+1Zulmira2A    17 S
+1Olivia1     12  S
+1SamuelSimoes   56   D   1
+1SandraS       56    D   1
+1HugoA        20    D  3
+1HugoB        25   D   10
+1HugoC       14   D    5
+1PauloAlves123   34   D   4
+1Carlos1     20   D    3
+1CarlaCardoso  34   D   7
+1SandraMotaA1   24  S 
+1PedroPedra   27    S
+1DianaD      89    S
+1TobiasF    98    S
+1LeonardoL  10   S
+2PauloPires1  23  S
+2SofiaA  23  S
+2Tomas111   12   I
+2PauloPires2   67    D   10
+2MarcoMarquesAAA   40    I
+2Zulmira2A    17 S
+2Olivia1     12  S
+2SamuelSimoes   56   D   1
+2SandraS       56    D   1
+2HugoA        20    D  3
+2HugoB        25   D   10
+2HugoC       14   D    5
+2PauloAlves123   34   D   4
+2Carlos1     20   D    3
+2CarlaCardoso  34   D   7
+2SandraMotaA1   24  S 
+2PedroPedra   27    S
+2DianaD      89    S
+2TobiasF    98    S
+2LeonardoL  10   S
+3PauloPires1  23  S
+3SofiaA  23  S
+3Tomas111   12   I
+3PauloPires2   67    D   10
+3MarcoMarquesAAA   40    I
+3Zulmira2A    17 S
+3Olivia1     12  S
+3SamuelSimoes   56   D   1
+3SandraS       56    D   1
+3HugoA        20    D  3
+3HugoB        25   D   10
+3HugoC       14   D    5
+3PauloAlves123   34   D   4
+3Carlos1     20   D    3
+3CarlaCardoso  34   D   7
+3SandraMotaA1   24  S 
+3PedroPedra   27    S
+3DianaD      89    S
+3TobiasF    98    S
+3LeonardoL  10   S
+
