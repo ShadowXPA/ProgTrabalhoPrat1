@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Person.o \
 	${OBJECTDIR}/Place.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils.o
@@ -63,6 +64,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/progtrabprat1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/progtrabprat1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Person.o: Person.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Person.o Person.c
 
 ${OBJECTDIR}/Place.o: Place.c
 	${MKDIR} -p ${OBJECTDIR}

@@ -11,88 +11,86 @@
 
 #include "Place.h"
 
-ListPlace *init_list_place(const char *filename) {
+ListPlace *init_places(const char *filename) {
     printf("\n Initializing List of places.\n");
-    ListPlace *tmp = calloc(1, sizeof(ListPlace));
-    if (tmp == NULL) {
+    ListPlace *places = calloc(1, sizeof(ListPlace));
+    if (places == NULL) {
         printf("Error allocating memory for places!\n");
-        exit(-1);
+        return NULL;
     }
 
     FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
         printf("Error opening the file '%s'.\n", filename);
-        free(tmp);
-        exit(-1);
+        free(places);
+        return NULL;
     }
 
-    Place tmp_place;
+    Place place;
     uint32_t i = 0;
     size_t read = 0;
     bool keep_reading = true;
     while (keep_reading) {
-        if ((read = fread(&tmp_place, sizeof(Place), 1, fp)) == 0) {
+        if ((read = fread(&place, sizeof(Place), 1, fp)) == 0) {
             // EOF
             keep_reading = false;
         } else {
-            if (!resize_list_place(tmp, (i + 1) * sizeof(Place))) {
+            if (!resize_places(places, (i + 1) * sizeof(Place))) {
                 printf("Error! Not able to allocate memory for places\n");
-                free(tmp->place);
-                free(tmp);
-                exit(-1);
+                free_places(places);
+                return NULL;
             }
-            tmp->place[i] = tmp_place;
-            tmp->size = ++i;//(i + 1);
+            places->place[i] = place;
+            places->size = ++i;//(i + 1);
             //i++;
         }
     }
 
     fclose(fp);
-    if (!evaluate_list_place(tmp)) {
+    if (!evaluate_places(places)) {
         printf("Error! The file '%s' contains syntax errors!\n", filename);
-        free(tmp->place);
-        free(tmp);
-        exit(-1);
+        free_places(places);
+        return NULL;
     }
-    return tmp;
+    return places;
 }
 
-bool resize_list_place(ListPlace *list_place, const size_t new_size) {
+bool resize_places(ListPlace *places, const size_t new_size) {
     Place *tmp = NULL;
 
-    tmp = realloc(list_place->place, new_size);
+    tmp = realloc(places->place, new_size);
     if (tmp == NULL)
         return false;
 
-    list_place->place = tmp;
+    places->place = tmp;
     return true;
 }
 
-bool evaluate_list_place(const ListPlace *list_place) {
+bool evaluate_places(const ListPlace *places) {
     // Evaluate whether the data is coherent or not
     // Unique IDs?
-    if (!_evaluate_list_id(list_place)) {
+    if (!_evaluate_list_id(places)) {
         printf("Places do not have unique IDs!.\n");
         return false;
     }
     // Correct connections
-    if (!_evaluate_list_connection(list_place)) {
+    if (!_evaluate_list_connection(places)) {
         printf("Places do not have coherent connections.\n");
         return false;
     }
     // Non-repeating connections
-    return _evaluate_list_connection_2(list_place);
+    return _evaluate_list_connection_2(places);
 }
 
-bool _evaluate_list_id(const ListPlace *list_place) {
-    for (int i = 0; i < list_place->size; i++) {
+bool _evaluate_list_id(const ListPlace *places) {
+    for (int i = 0; i < places->size; i++) {
         // Positive ID
-        if (list_place->place[i].id < 0)
+        if (places->place[i].id < 0)
             return false;
         else
             // Unique ID
-            for (int j = i + 1; j < list_place->size; j++) {
-                if (list_place->place[i].id == list_place->place[j].id)
+            for (int j = i + 1; j < places->size; j++) {
+                if (places->place[i].id == places->place[j].id)
                     return false;
             }
     }
@@ -100,7 +98,7 @@ bool _evaluate_list_id(const ListPlace *list_place) {
     return true;
 }
 
-bool _evaluate_list_connection(const ListPlace *list_place) {
+bool _evaluate_list_connection(const ListPlace *places) {
     /* Not efficient... 4 for loops...
      * For each place, search each connection with id != -1
      * if its != -1 search each place until it finds the id with the connection where i != k
@@ -109,15 +107,15 @@ bool _evaluate_list_connection(const ListPlace *list_place) {
      * else, it doesn't need to keep searching.
      * In the end if all connections are OKAY, return true
      */
-    for (int i = 0; i < list_place->size; i++) {
+    for (int i = 0; i < places->size; i++) {
         for (int j = 0; j < MAX_CONNECTIONS; j++) {
-            if (list_place->place[i].connection[j] != -1) {
-                for (int k = 0; k < list_place->size; k++) {
+            if (places->place[i].connection[j] != -1) {
+                for (int k = 0; k < places->size; k++) {
                     if (i != k) {
-                        if (list_place->place[i].connection[j] == list_place->place[k].id) {
+                        if (places->place[i].connection[j] == places->place[k].id) {
                             bool has_connection = false;
                             for (int l = 0; l < MAX_CONNECTIONS; l++) {
-                                if (list_place->place[k].connection[l] == list_place->place[i].id) {
+                                if (places->place[k].connection[l] == places->place[i].id) {
                                     has_connection = true;
                                     break;
                                 }
@@ -136,14 +134,14 @@ bool _evaluate_list_connection(const ListPlace *list_place) {
     return true;
 }
 
-bool _evaluate_list_connection_2(const ListPlace *list_place) {
-    for (int i = 0; i < list_place->size; i++) {
+bool _evaluate_list_connection_2(const ListPlace *places) {
+    for (int i = 0; i < places->size; i++) {
         for (int j = 0; j < MAX_CONNECTIONS - 1; j++) {
             for (int k = j + 1; k < MAX_CONNECTIONS; k++) {
                 // Repeated connections
-                if (list_place->place[i].connection[j] != -1 &&
-                        list_place->place[i].connection[k] != -1 &&
-                        list_place->place[i].connection[j] == list_place->place[i].connection[k])
+                if (places->place[i].connection[j] != -1 &&
+                        places->place[i].connection[k] != -1 &&
+                        places->place[i].connection[j] == places->place[i].connection[k])
                     return false;
             }
         }
@@ -152,20 +150,25 @@ bool _evaluate_list_connection_2(const ListPlace *list_place) {
     return true;
 }
 
-void view_list_place(const ListPlace *list_place) {
-    printf(" Places:\n-----\n");
+void print_places(const ListPlace *places) {
+    printf("\n----------------------\n Places:\n----------------------\n");
     char buffer0[11];
     char buffer1[11];
     char buffer2[11];
-    for (int i = 0; i < list_place->size; i++) {
-        snprintf(buffer0, 11, "%d", list_place->place[i].connection[0]);
-        snprintf(buffer1, 11, "%d", list_place->place[i].connection[1]);
-        snprintf(buffer2, 11, "%d", list_place->place[i].connection[2]);
+    for (int i = 0; i < places->size; i++) {
+        snprintf(buffer0, 11, "%d", places->place[i].connection[0]);
+        snprintf(buffer1, 11, "%d", places->place[i].connection[1]);
+        snprintf(buffer2, 11, "%d", places->place[i].connection[2]);
         printf(" ID: %d\n Capacity: %d\n Connections:\n  (1): %s\n  (2): %s\n  (3): %s\n\n",
-                list_place->place[i].id, list_place->place[i].capacity,
-                list_place->place[i].connection[0] == -1 ? "No connection." : buffer0,
-                list_place->place[i].connection[1] == -1 ? "No connection." : buffer1,
-                list_place->place[i].connection[2] == -1 ? "No connection." : buffer2);
+                places->place[i].id, places->place[i].capacity,
+                places->place[i].connection[0] == -1 ? "No connection." : buffer0,
+                places->place[i].connection[1] == -1 ? "No connection." : buffer1,
+                places->place[i].connection[2] == -1 ? "No connection." : buffer2);
     }
-    printf(" End.\n-----\n");
+    printf("----------------------\n End.\n----------------------\n");
+}
+
+void free_places(ListPlace *places) {
+    free(places->place);
+    free(places);
 }

@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef LOCAL_H
-#define LOCAL_H
+#ifndef PLACE_H
+#define PLACE_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,18 +34,19 @@ extern "C" {
         uint32_t size;
     } ListPlace;
 
-    ListPlace *init_list_place(const char *dirname);
-    bool resize_list_place(ListPlace *list_place, const size_t new_size);
-    void view_list_place(const ListPlace *list_place);
-    bool evaluate_list_place(const ListPlace *list_place);
-    bool _evaluate_list_id(const ListPlace *list_place);
-    bool _evaluate_list_connection(const ListPlace *list_place);
-    bool _evaluate_list_connection_2(const ListPlace *list_place);
+    ListPlace *init_places(const char *dirname);
+    bool resize_places(ListPlace *places, const size_t new_size);
+    void print_places(const ListPlace *places);
+    void free_places(ListPlace *places);
+    bool evaluate_places(const ListPlace *places);
+    bool _evaluate_list_id(const ListPlace *places);
+    bool _evaluate_list_connection(const ListPlace *places);
+    bool _evaluate_list_connection_2(const ListPlace *places);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* LOCAL_H */
+#endif /* PLACE_H */
 
