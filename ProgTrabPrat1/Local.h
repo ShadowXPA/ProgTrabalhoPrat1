@@ -24,6 +24,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define MAX_CONNECTIONS 3
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,7 +33,7 @@ extern "C" {
     typedef struct place {
         int32_t id;
         int32_t capacity;
-        int32_t connection[3];
+        int32_t connection[MAX_CONNECTIONS];
     } Place;
 
     typedef struct arr_place {
@@ -40,7 +42,12 @@ extern "C" {
     } ListPlace;
 
     ListPlace *init_list_place(const char *dirname);
-    bool resize_list_place(ListPlace *list_place, size_t new_size);
+    bool resize_list_place(ListPlace *list_place, const size_t new_size);
+    void view_list_place(const ListPlace *list_place);
+    bool evaluate_list_place(const ListPlace *list_place);
+    bool _evaluate_list_id(const ListPlace *list_place);
+    bool _evaluate_list_connection(const ListPlace *list_place);
+    bool _evaluate_list_connection_2(const ListPlace *list_place);
 
 
 #ifdef __cplusplus

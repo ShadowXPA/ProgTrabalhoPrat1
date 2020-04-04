@@ -21,17 +21,17 @@
 #include "utils.h"
 #include "Local.h"
 
-#define MAX_FILE 256
+#define MAX_FILENAME 256
 
 void prog_exiting() {
     printf("\n----------------------\nO programa irá terminar.\n----------------------\n");
 }
 
 int main(int argc, char *argv[], char **envp) {
-    setlocale(LC_ALL, "pt_PT");
+    setlocale(LC_ALL, "Portuguese");
     atexit(prog_exiting);
     initRandom();
-    char filename[MAX_FILE];
+    char filename[MAX_FILENAME];
     ListPlace *places = NULL;
 
     if (argc == 2) {
@@ -47,6 +47,8 @@ int main(int argc, char *argv[], char **envp) {
         printf("Os locais não foram inicializados com sucesso!\n");
         exit(-1);
     }
+
+    view_list_place(places);
 
     free(places);
     scanf("%~[^\n]");
