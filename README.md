@@ -31,7 +31,7 @@
   Os possíveis espaços para realizar a simulação estão armazenados em ficheiros binários (1 ficheiro por espaço). Cada um destes ficheiros contém várias estruturas do tipo local, uma para cada um dos locais existentes nesse espaço:
 
 `typedef struct sala local, *plocal;
-    
+
     struct sala {
     
       int id;         // id numérico do local
@@ -56,7 +56,7 @@
  - Estado: pode ser `S`audável, `D`oente, `I`mune
  - Caso esteja doente, existe a informação sobre há quantos dias foi infetado
 
-  Ficheiros de texto armazenam informação sobre populações de pessoas. Cada ficheiro de texto tem obrigatoriamente a informação ãrmazenada no formato descrito a seguir.
+  Ficheiros de texto armazenam informação sobre populações de pessoas. Cada ficheiro de texto tem obrigatoriamente a informação armazenada no formato descrito a seguir.
   Uma linha tem toda a informação de uma pessoa, de acordo com a seguinte ordem:
   - Identificador
   - Idade
@@ -90,5 +90,5 @@
     - Taxa de imunes
     - ...
   - `Adicionar doente`: 1 nova pessoa doente é adicionada a um local. O utilizador especifica o id do local e o identificador, a idade e o número de dias de infeção da nova pessoa.
-  - `Transferir pessoas`: N pessoas são movidas de um local para outro dentro do espaço, desde que estes locais tenham uma ligação direta. Os ids dos locais de origem e de destino e o valor N são indicados e o valor N são indicados pelo utilizador (por exemplo, mover 3 pessoas do local 1 para o local 3). O programa escolhe N pessoas de forma aleatória, de entre as que se encontram no local de origem.
+  - `Transferir pessoas`: N pessoas são movidas de um local para outro dentro do espaço, desde que estes locais tenham uma ligação direta. Os ids dos locais de origem e de destino e o valor N são indicados pelo utilizador (por exemplo, mover 3 pessoas do local 1 para o local 3). O programa escolhe N pessoas de forma aleatória, de entre as que se encontram no local de origem.
   - `Terminar Simulação`: Ao terminar a simulação, a aplicação gera um relatório final. Fica ao critério do aluno decidir que informação deve ser incluída, mas convém que seja completa. Este relatório é guardado num ficheiro de texto com o nome `report.txt`. Além disso, a população existe na última iteração deve ser guardada num ficheiro de texto. O nome deste ficheiro é indicado pelo utilizador.
