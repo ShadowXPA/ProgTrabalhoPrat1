@@ -212,7 +212,7 @@ void adding_people(ListPlace *places, Config *cfg, ListPerson *people) {
     int32_t place_id = -1;
     uint8_t op = 0;
     char buffer[BUFFER_SIZE], *token;
-    const char s[3] = " \n";
+    const char s[4] = " \t\n";
 
     do {
         printf(" (1) - Place ID: %d\n", place_id);
@@ -472,7 +472,7 @@ uint8_t print_menu() {
 uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
     uint8_t op = 0;
     char buffer[BUFFER_SIZE], *token;
-    const char s[3] = " \n";
+    const char s[4] = " \t\n";
     do {
         printf(" [CMD_MODE] > ");
         scanf("%[^\n]", buffer);
