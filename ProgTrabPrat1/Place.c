@@ -38,6 +38,7 @@ ListPlace *init_places(const char *filename) {
             if (!resize_places(places, (i + 1) * sizeof(Place))) {
                 printf("Error! Not able to allocate memory for places\n");
                 free_places(places);
+                fclose(fp);
                 return NULL;
             }
             places->place[i] = place;
@@ -181,4 +182,17 @@ uint32_t get_max_capacity(const ListPlace *places) {
     }
 
     return tmp;
+}
+
+int32_t get_place_by_id(ListPlace *places, const int32_t id, Place **place) {
+    *place = NULL;
+
+    for (int32_t i = 0; i < places->size; i++) {
+        if (places->place[i].id == id) {
+            *place = &places->place[i];
+            return i;
+        }
+    }
+
+    return (int32_t)-1;
 }

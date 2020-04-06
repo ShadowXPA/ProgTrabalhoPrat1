@@ -10,7 +10,6 @@
  */
 
 #include <stdio.h>
-#include <stdint.h>
 #include "config.h"
 
 uint32_t get_real_capacity(Config *cfg, uint32_t size) {
@@ -26,6 +25,6 @@ uint32_t get_real_capacity(Config *cfg, uint32_t size) {
 void print_cfg(Config *cfg, uint32_t size) {
     printf("\n----------------------\n Simulation Configuration:\n----------------------\n");
     printf(" Day: %d\n Maximum capacity: %d\n Current capacity: %d\n",
-            cfg->days, cfg->max_capacity, get_real_capacity(cfg, size));
+            cfg->days, cfg->max_capacity, cfg->real_capacity/*get_real_capacity(cfg, size)*/);
     printf("----------------------\n End.\n----------------------\n");
 }

@@ -19,6 +19,7 @@
 
 #define MAX_PERSON_ID 30
 #define BUFFER_SIZE 512
+#define PERSON_MAX_AGE 130
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,7 +51,14 @@ extern "C" {
     bool person_exists(ListPerson *people, const char *person_id);
     bool evaluate_person(const Person *person);
 
-    void distribute_people(ListPerson *people, Config *cfg, const ListPlace *places);
+    ListPerson *distribute_people(ListPerson *people, Config *cfg, const ListPlace *places);
+    int32_t get_total___(ListPerson *people, const Status HIS);
+    int32_t get_total_healthy(ListPerson *people);
+    int32_t get_total_immune(ListPerson *people);
+    int32_t get_total_sick(ListPerson *people);
+    int32_t get_total_people_room(ListPerson *people, const Place *place);
+    int32_t get_total_sick_room(ListPerson *people, const Place *place);
+    Person **get_people_room(ListPerson *people, const Place *place, const int32_t size);
 
 #ifdef __cplusplus
 }
