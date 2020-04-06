@@ -3,7 +3,9 @@
 
 #ifndef UTILS_H
 #define UTILS_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
     #include <stdio.h>
     #include <stdlib.h>
     #include <time.h>
@@ -17,5 +19,7 @@
 
     // Devolve o valor 1 com probabilidade prob. Caso contrario, devolve 0
     int probEvento(float prob);
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* UTILS_H */
