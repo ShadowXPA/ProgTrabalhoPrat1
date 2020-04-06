@@ -90,20 +90,24 @@ ListPerson *init_people(const char *filename) {
 }
 
 void print_people(ListPerson *people) {
+    print_people___(people, stdout, "People");
+}
+
+void print_people___(ListPerson *people, FILE *stream, const char *title) {
     ListPerson *current = people;
 
-    printf("\n----------------------\n People:\n----------------------\n");
+    fprintf(stream, "\n----------------------\n %s:\n----------------------\n", title);
     while (current != NULL) {
-        printf(" Person:\n  ID: '%s'\n  Age: %d\n  Status: '%c'\n  Days sick: %d", current->person.id,
+        fprintf(stream , " Person:\n  ID: '%s'\n  Age: %d\n  Status: '%c'\n  Days sick: %d", current->person.id,
                 current->person.age, current->person.status, current->person.days);
         if (current->person.place != NULL) {
-            printf("\n    Place ID: %d\n\n", current->person.place->id);
+            fprintf(stream, "\n    Place ID: %d\n\n", current->person.place->id);
         } else {
-            printf("\n\n");
+            fprintf(stream, "\n\n");
         }
         current = current->next;
     }
-    printf("----------------------\n End.\n----------------------\n");
+    fprintf(stream, "----------------------\n End.\n----------------------\n");
 }
 
 bool add_person(ListPerson *people, const Person *person) {

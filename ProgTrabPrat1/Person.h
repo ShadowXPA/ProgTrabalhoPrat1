@@ -46,6 +46,7 @@ extern "C" {
 
     ListPerson *init_people(const char *filename);
     void print_people(ListPerson *people);
+    void print_people___(ListPerson *people, FILE *stream, const char *title);
     bool add_person(ListPerson *people, const Person *person);
     void free_people(ListPerson *people);
     bool person_exists(ListPerson *people, const char *person_id);

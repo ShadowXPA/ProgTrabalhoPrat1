@@ -15,6 +15,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Report filename
+ */
+#define REPORT_FILENAME "report.txt"
 /* Spread rate: rate at which the virus will spread
  */
 #define SPREAD_RATE 0.05f

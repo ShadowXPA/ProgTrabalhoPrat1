@@ -37,6 +37,7 @@ extern "C" {
     ListPlace *init_places(const char *dirname);
     bool resize_places(ListPlace *places, const size_t new_size);
     void print_places(const ListPlace *places);
+    void print_places___(const ListPlace *places, FILE *stream, const char *title);
     void free_places(ListPlace *places);
     bool evaluate_places(const ListPlace *places);
     bool _evaluate_list_id(const ListPlace *places);

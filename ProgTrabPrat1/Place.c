@@ -152,7 +152,11 @@ bool _evaluate_list_connection_2(const ListPlace *places) {
 }
 
 void print_places(const ListPlace *places) {
-    printf("\n----------------------\n Places:\n----------------------\n");
+    print_places___(places, stdout, "Places");
+}
+
+void print_places___(const ListPlace *places, FILE *stream, const char *title) {
+    fprintf(stream, "\n----------------------\n %s:\n----------------------\n", title);
     char buffer0[11];
     char buffer1[11];
     char buffer2[11];
@@ -160,13 +164,13 @@ void print_places(const ListPlace *places) {
         snprintf(buffer0, 11, "%d", places->place[i].connection[0]);
         snprintf(buffer1, 11, "%d", places->place[i].connection[1]);
         snprintf(buffer2, 11, "%d", places->place[i].connection[2]);
-        printf(" ID: %d\n Capacity: %d\n Connections:\n  (1): %s\n  (2): %s\n  (3): %s\n\n",
+        fprintf(stream, " ID: %d\n Capacity: %d\n Connections:\n  (1): %s\n  (2): %s\n  (3): %s\n\n",
                 places->place[i].id, places->place[i].capacity,
                 places->place[i].connection[0] == -1 ? "No connection." : buffer0,
                 places->place[i].connection[1] == -1 ? "No connection." : buffer1,
                 places->place[i].connection[2] == -1 ? "No connection." : buffer2);
     }
-    printf("----------------------\n End.\n----------------------\n");
+    fprintf(stream, "----------------------\n End.\n----------------------\n");
 }
 
 void free_places(ListPlace *places) {
