@@ -35,8 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Utils/utils.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/Person.o \
+	${OBJECTDIR}/Place.o \
+	${OBJECTDIR}/config.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/utils.o
 
 
 # C Compiler Flags
@@ -63,15 +66,30 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/progtrabprat1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/progtrabprat1 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/Utils/utils.o: Utils/utils.c
-	${MKDIR} -p ${OBJECTDIR}/Utils
+${OBJECTDIR}/Person.o: Person.c
+	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Utils/utils.o Utils/utils.c
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Person.o Person.c
+
+${OBJECTDIR}/Place.o: Place.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Place.o Place.c
+
+${OBJECTDIR}/config.o: config.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/config.o config.c
 
 ${OBJECTDIR}/main.o: main.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+
+${OBJECTDIR}/utils.o: utils.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/utils.o utils.c
 
 # Subprojects
 .build-subprojects:
