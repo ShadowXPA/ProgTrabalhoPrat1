@@ -31,7 +31,7 @@ ListPerson *init_people(const char *filename) {
     Person person;
     bool first_person = true;
     char buffer[BUFFER_SIZE];
-    const char s[3] = " \n";
+    const char s[4] = " \t\n";
     char *token;
     while (fgets(buffer, BUFFER_SIZE, fp) != NULL) {
         token = strtok(buffer, s);
