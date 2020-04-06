@@ -133,6 +133,8 @@ bool simulating(ListPlace *places, Config *cfg, ListPerson *people, ListPerson *
     }
 
     switch (op) {
+        case 7:
+            return false;
         case 6:
             // Generate reports
             generate_reports(places, cfg, people, discarded_people);
@@ -458,13 +460,14 @@ uint8_t print_menu() {
     printf(" (3) - Add sick person\n");
     printf(" (4) - Transfer people\n");
     printf(" (5) - Switch (Console mode)\n");
-    printf(" (6) - End simulation\n\n");
+    printf(" (6) - End simulation\n");
+    printf(" (7) - Interrupt (End simulation without report)\n\n");
     do {
         printf(" > ");
         scanf("%[^\n]", buffer);
         getchar();
         op = atoi(buffer);
-    } while (op < 1 || op > 6);
+    } while (op < 1 || op > 7);
 
     return op;
 }
@@ -495,6 +498,10 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                     strncmp("terminate", token, BUFFER_SIZE) == 0 ||
                     strncmp("exit", token, BUFFER_SIZE) == 0) {
                 op = 6;
+            } else if (strncmp("kill", token, BUFFER_SIZE) == 0 ||
+                    strncmp("int", token, BUFFER_SIZE) == 0 ||
+                    strncmp("interrupt", token, BUFFER_SIZE) == 0) {
+                op = 7;
             } else if (strncmp("add", token, BUFFER_SIZE) == 0) {
                 bool completed = false;
                 token = strtok(NULL, s);
@@ -554,7 +561,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                 printf(" Unknown command...\n");
             }
         }
-    } while (op < 1 || op > 6);
+    } while (op < 1 || op > 7);
 
     return op;
 }
@@ -645,6 +652,7 @@ void show_cmds() {
     printf("\tmove [N] [place_src] [place_dest]\n\t\t Moves [N] people around randomly as long as the [place_src] and [place_dest] are connected.\n\n");
     printf("\tswitch | console | cmd\n\t\t Toggles console mode.\n\n");
     printf("\tend | terminate | exit\n\t\t Ends the simulation.\n\n");
+    printf("\tkill | int | interrupt\n\t\t Ends the simulation (without report).\n\n");
     printf("\thelp\n\t\t Shows this.\n\n");
 }
 
