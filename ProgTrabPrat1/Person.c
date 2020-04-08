@@ -24,7 +24,6 @@ ListPerson *init_people(const char *filename) {
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
         printf("Error opening the file '%s'.\n", filename);
-        free(head);
         return NULL;
     }
 
@@ -72,12 +71,19 @@ ListPerson *init_people(const char *filename) {
                     fclose(fp);
                     return NULL;
                 }
+                if (!evaluate_person(&person)) {
+                    printf("Couldn't add person...\n");
+                    free_people(head);
+                    fclose(fp);
+                    return NULL;
+                }
                 head->person = person;
                 head->next = NULL;
                 first_person = false;
             } else {
                 if (!add_person(head, &person)) {
                     printf("Couldn't add person...\n");
+                    free_people(head);
                     fclose(fp);
                     return NULL;
                 }
@@ -149,6 +155,10 @@ bool person_exists(ListPerson *people, const char *person_id) {
 }
 
 bool evaluate_person(const Person *person) {
+    if (strcmp(person->id, "") == 0) {
+        printf("Person ID is empty...\n");
+        return false;
+    }
     if (person->age == 0) {
         printf("Age is 0. Age needs to be 1 or higher.\n");
         return false;

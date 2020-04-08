@@ -49,7 +49,7 @@ ListPlace *init_places(const char *filename) {
 
     fclose(fp);
     if (!evaluate_places(places)) {
-        printf("Error! The file '%s' contains syntax errors!\n", filename);
+        printf("Error! The file '%s' does not contain the proper places!\n", filename);
         free_places(places);
         return NULL;
     }
