@@ -25,7 +25,7 @@ void show_cmds();
 void step(ListPlace *places, Config *cfg, ListPerson *people);
 void spread_virus(ListPlace *places, ListPerson *people);
 void probability_recovery(ListPerson *people);
-void evaluate_if_recovered(ListPerson *people);
+//void evaluate_if_recovered(ListPerson *people);
 void adding_people(ListPlace *places, Config *cfg, ListPerson *people);
 void transfering_people(ListPlace *places, Config *cfg, ListPerson *people);
 
@@ -88,7 +88,7 @@ int main(int argc, char *argv[], char **envp) {
     printf("\n\n Initializing the simulation configuration and distributing the people.\n");
     sim_cfg.days = 0;
     sim_cfg.console_mode = false;
-    sim_cfg.capacity = calloc(places->size, sizeof(Config));
+    sim_cfg.capacity = calloc(places->size, sizeof(int32_t));
     if (sim_cfg.capacity == NULL) {
         printf("Couldn't allocate memory for auxiliary data.\n");
         free_places(places);
@@ -133,6 +133,8 @@ bool simulating(ListPlace *places, Config *cfg, ListPerson *people, ListPerson *
     }
 
     switch (op) {
+        case 7:
+            return false;
         case 6:
             // Generate reports
             generate_reports(places, cfg, people, discarded_people);
@@ -458,13 +460,14 @@ uint8_t print_menu() {
     printf(" (3) - Add sick person\n");
     printf(" (4) - Transfer people\n");
     printf(" (5) - Switch (Console mode)\n");
-    printf(" (6) - End simulation\n\n");
+    printf(" (6) - End simulation\n");
+    printf(" (7) - Interrupt (End simulation without report)\n\n");
     do {
         printf(" > ");
         scanf("%[^\n]", buffer);
         getchar();
         op = atoi(buffer);
-    } while (op < 1 || op > 6);
+    } while (op < 1 || op > 7);
 
     return op;
 }
@@ -473,6 +476,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
     uint8_t op = 0;
     char buffer[BUFFER_SIZE], *token;
     const char s[4] = " \t\n";
+    printf(" Type 'help' for a list of commands.\n");
     do {
         printf(" [CMD_MODE] > ");
         scanf("%[^\n]", buffer);
@@ -495,6 +499,10 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                     strncmp("terminate", token, BUFFER_SIZE) == 0 ||
                     strncmp("exit", token, BUFFER_SIZE) == 0) {
                 op = 6;
+            } else if (strncmp("kill", token, BUFFER_SIZE) == 0 ||
+                    strncmp("int", token, BUFFER_SIZE) == 0 ||
+                    strncmp("interrupt", token, BUFFER_SIZE) == 0) {
+                op = 7;
             } else if (strncmp("add", token, BUFFER_SIZE) == 0) {
                 bool completed = false;
                 token = strtok(NULL, s);
@@ -554,7 +562,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                 printf(" Unknown command...\n");
             }
         }
-    } while (op < 1 || op > 6);
+    } while (op < 1 || op > 7);
 
     return op;
 }
@@ -645,6 +653,7 @@ void show_cmds() {
     printf("\tmove [N] [place_src] [place_dest]\n\t\t Moves [N] people around randomly as long as the [place_src] and [place_dest] are connected.\n\n");
     printf("\tswitch | console | cmd\n\t\t Toggles console mode.\n\n");
     printf("\tend | terminate | exit\n\t\t Ends the simulation.\n\n");
+    printf("\tkill | int | interrupt\n\t\t Ends the simulation (without report).\n\n");
     printf("\thelp\n\t\t Shows this.\n\n");
 }
 
@@ -698,7 +707,7 @@ void probability_recovery(ListPerson *people) {
             }
 
             // Evaluate_if_recovered
-            if (current->person.days == INF_MAX_DUR(current->person.age)) {
+            if (current->person.days >= INF_MAX_DUR(current->person.age)) {
                 // Calculate probability!
                 if (probEvento(IMMUNITY_RATE)) {
                     current->person.status = IMMUNE;
@@ -714,22 +723,22 @@ void probability_recovery(ListPerson *people) {
     }
 }
 
-void evaluate_if_recovered(ListPerson *people) {
-    ListPerson *current = people;
-
-    while (current != NULL) {
-        if (current->person.status == SICK) {
-            if (current->person.days == INF_MAX_DUR(current->person.age)) {
-                // Calculate probability!
-                if (probEvento(IMMUNITY_RATE)) {
-                    current->person.status = IMMUNE;
-                } else {
-                    current->person.status = HEALTHY;
-                }
-            } else {
-                current->person.days++;
-            }
-        }
-        current = current->next;
-    }
-}
+//void evaluate_if_recovered(ListPerson *people) {
+//    ListPerson *current = people;
+//
+//    while (current != NULL) {
+//        if (current->person.status == SICK) {
+//            if (current->person.days == INF_MAX_DUR(current->person.age)) {
+//                // Calculate probability!
+//                if (probEvento(IMMUNITY_RATE)) {
+//                    current->person.status = IMMUNE;
+//                } else {
+//                    current->person.status = HEALTHY;
+//                }
+//            } else {
+//                current->person.days++;
+//            }
+//        }
+//        current = current->next;
+//    }
+//}
