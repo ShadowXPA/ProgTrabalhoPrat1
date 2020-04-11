@@ -1,5 +1,5 @@
 /*
- * Simulação da Propagação de Vírus - Criador de locais ou Vizualizador de locais
+ * Simulação da Propagação de Vírus - Criador de locais ou Visualizador de locais
  *
  * Trabalho realizado por: Pedro dos Santos Alves
  * Nº: 2019112789
