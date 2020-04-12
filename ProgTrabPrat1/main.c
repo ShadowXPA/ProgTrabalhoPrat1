@@ -82,13 +82,13 @@ int main(int argc, char *argv[], char **envp) {
         free_places(places);
         exit(-1);
     }
-    print_people(people);
+    //print_people(people);
 
     // Distribute the people and init configuration
     printf("\n\n Initializing the simulation configuration and distributing the people.\n");
     sim_cfg.days = 0;
     sim_cfg.console_mode = false;
-    sim_cfg.capacity = calloc(places->size, sizeof(int32_t));
+    sim_cfg.capacity = calloc(places->size, sizeof (int32_t));
     if (sim_cfg.capacity == NULL) {
         printf("Couldn't allocate memory for auxiliary data.\n");
         free_places(places);
@@ -101,17 +101,17 @@ int main(int argc, char *argv[], char **envp) {
     if (people_discarded == people) {
         people_discarded = NULL;
     }
-    printf("\n\n People who belong to the simulation:\n");
+    printf("\n\n People who belong in the simulation:\n");
     print_people(people);
     if (people_discarded != NULL) {
-        printf("\n\n People who DO NOT belong to the simulation:\n");
+        printf("\n\n People who DO NOT belong in the simulation:\n");
         print_people(people_discarded);
     }
 
     // Start Simulation
     printf("\n\n Initializing simulation...\n");
     printf("\n\n\n----------------------\n  Simulation start!\n----------------------\n");
-    while(simulating(places, &sim_cfg, people, people_discarded));
+    while (simulating(places, &sim_cfg, people, people_discarded));
 
     free(sim_cfg.capacity);
     free_places(places);
@@ -182,11 +182,20 @@ void generate_reports(ListPlace *places, Config *cfg, ListPerson *people, ListPe
     peo = fopen(filename, "w");
     if (peo == NULL) {
         printf(" Could not open '%s'...\n Report not created!\n", filename);
-        return;
+    } else {
+        ListPerson *current = people;
+        
+        while (current != NULL) {
+            fprintf(peo, "%s %d %c", current->person.id, current->person.age, current->person.status);
+            if (current->person.status == 'D')
+                fprintf(peo, " %d", current->person.days);
+            fprintf(peo, "\n");
+            current = current->next;
+        }
+//        print_people___(people, peo, "People who were part of the simulation");
+//        print_people___(discarded_people, peo, "People who were not part of the simulation");
+        fclose(peo);
     }
-    print_people___(people, peo, "People who were part of the simulation");
-    print_people___(discarded_people, peo, "People who were not part of the simulation");
-    fclose(peo);
     time_t unixT = time(NULL);
     rp = fopen(REPORT_FILENAME, "a");
     if (rp == NULL) {
@@ -361,9 +370,9 @@ void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people) {
     int32_t total_h = get_total_healthy(people);
     int32_t total_i = get_total_immune(people);
     int32_t total_s = get_total_sick(people);
-    float percent_h = (((float)total_h)/cfg->real_capacity)*100.0f;
-    float percent_i = (((float)total_i)/cfg->real_capacity)*100.0f;
-    float percent_s = (((float)total_s)/cfg->real_capacity)*100.0f;
+    float percent_h = (((float) total_h) / cfg->real_capacity)*100.0f;
+    float percent_i = (((float) total_i) / cfg->real_capacity)*100.0f;
+    float percent_s = (((float) total_s) / cfg->real_capacity)*100.0f;
     char buffer[23];
     show_bar(buffer, percent_h);
     printf("  Number of healthy people: %d\t(%.2f\%) \t%s\n", total_h, percent_h, buffer);
@@ -399,9 +408,9 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
     int32_t total_h = get_total_healthy(people);
     int32_t total_i = get_total_immune(people);
     int32_t total_s = get_total_sick(people);
-    float percent_h = (((float)total_h)/cfg->real_capacity)*100.0f;
-    float percent_i = (((float)total_i)/cfg->real_capacity)*100.0f;
-    float percent_s = (((float)total_s)/cfg->real_capacity)*100.0f;
+    float percent_h = (((float) total_h) / cfg->real_capacity)*100.0f;
+    float percent_i = (((float) total_i) / cfg->real_capacity)*100.0f;
+    float percent_s = (((float) total_s) / cfg->real_capacity)*100.0f;
     char buffer[23];
     show_bar(buffer, percent_h);
     fprintf(stream, "  Number of healthy people: %d\t(%.2f\%) \t%s\n", total_h, percent_h, buffer);
@@ -418,7 +427,7 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
     for (int i = 0; i < places->size; i++) {
         int32_t total_place = get_total_people_room(people, &places->place[i]);
         int32_t total_sick = get_total_sick_room(people, &places->place[i]);
-        int32_t people_to_infect = (int32_t)((total_place * SPREAD_RATE) * total_sick);
+        int32_t people_to_infect = (int32_t) ((total_place * SPREAD_RATE) * total_sick);
         people_to_infect = (people_to_infect > total_place) ? total_place : people_to_infect;
         fprintf(stream, "  Place: %d\n", places->place[i].id);
         fprintf(stream, "   Total people: %d\n", total_place);
@@ -658,6 +667,7 @@ void show_cmds() {
 }
 
 // Simulation functions
+
 void step(ListPlace *places, Config *cfg, ListPerson *people) {
     cfg->days++;
 
@@ -674,7 +684,7 @@ void spread_virus(ListPlace *places, ListPerson *people) {
         // Get parameters
         int32_t total_room = get_total_people_room(people, &places->place[i]);
         int32_t total_sick = get_total_sick_room(people, &places->place[i]);
-        int32_t people_to_infect = (int32_t)((total_room * SPREAD_RATE) * total_sick);
+        int32_t people_to_infect = (int32_t) ((total_room * SPREAD_RATE) * total_sick);
         people_to_infect = (people_to_infect > total_room) ? total_room : people_to_infect;
         //printf("Total people in room ID (%d): '%d'\n", places->place[i].id, total_room);
         //printf("Total people sick in room ID (%d): '%d'\n", places->place[i].id, total_sick);

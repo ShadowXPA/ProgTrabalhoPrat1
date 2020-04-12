@@ -48,7 +48,7 @@ ListPlace *init_places(const char *filename) {
     }
 
     fclose(fp);
-    if (!evaluate_places(places)) {
+    if (!evaluate_places(places) || places->size == 0) {
         printf("Error! The file '%s' does not contain the proper places!\n", filename);
         free_places(places);
         return NULL;
