@@ -390,7 +390,7 @@ void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people) {
         cfg->peak_sick = total_s;
         cfg->day_peak = cfg->days;
     }
-    printf("  Peak of number of people sick: %d\n", cfg->peak_sick);
+    printf("  Peak number of people sick: %d\n", cfg->peak_sick);
     printf("  Day of peak: %d\n", cfg->day_peak);
     printf("----------------------\n End\n----------------------\n\n");
 }
@@ -419,7 +419,7 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
     show_bar(buffer, percent_s);
     fprintf(stream, "  Number of sick people: %d\t(%.2f\%) \t%s\n", total_s, percent_s, buffer);
     fprintf(stream, "  Day of virus extinction: %d\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
-    fprintf(stream, "  Peak of number of people sick: %d\n", cfg->peak_sick);
+    fprintf(stream, "  Peak number of people sick: %d\n", cfg->peak_sick);
     fprintf(stream, "  Day of peak: %d\n", cfg->day_peak);
     print_places___(places, stream, "Places");
     fprintf(stream, "\n");

@@ -36,6 +36,10 @@ void create_file(ListPlace *places);
 void print_places___(const ListPlace *places, FILE *stream, const char *title);
 void show_help();
 bool add_con(ListPlace *places, const int32_t P_SRC_id, const int32_t P_DEST_id);
+bool evaluate_places(const ListPlace *places);
+bool _evaluate_list_id(const ListPlace *places);
+bool _evaluate_list_connection(const ListPlace *places);
+bool _evaluate_list_connection_2(const ListPlace *places);
 
 /*
  * 
@@ -81,6 +85,11 @@ int main(int argc, char *argv[], char **envp) {
 
         fclose(rf);
         print_places___(&places, stdout, "Places from file");
+        if (evaluate_places(&places)) {
+            printf("\n\n  Valid file!\n\n");
+        } else {
+            printf("\n\n  Invalid file!\n\n");
+        }
         free(places.place);
         return (EXIT_SUCCESS);
     }
@@ -284,4 +293,70 @@ void create_file(ListPlace *places) {
     fp = fopen(filename, "wb");
     fwrite(places->place, sizeof (Place), places->size, fp);
     fclose(fp);
+}
+
+bool evaluate_places(const ListPlace *places) {
+    if (!_evaluate_list_id(places)) {
+        return false;
+    }
+    if (!_evaluate_list_connection(places)) {
+        return false;
+    }
+    return _evaluate_list_connection_2(places);
+}
+
+bool _evaluate_list_id(const ListPlace *places) {
+    for (uint32_t i = 0; i < places->size; i++) {
+        if (places->place[i].id < 0)
+            return false;
+        else
+            for (uint32_t j = i + 1; j < places->size; j++) {
+                if (places->place[i].id == places->place[j].id)
+                    return false;
+            }
+    }
+
+    return true;
+}
+
+bool _evaluate_list_connection(const ListPlace *places) {
+    for (uint32_t i = 0; i < places->size; i++) {
+        for (uint32_t j = 0; j < MAX_CONNECTIONS; j++) {
+            if (places->place[i].connection[j] != -1) {
+                uint8_t checkpoint = 1;
+                for (uint32_t k = 0; k < places->size; k++) {
+                    if (i != k && places->place[i].connection[j] == places->place[k].id) {
+                        checkpoint++;
+                        for (uint32_t l = 0; l < MAX_CONNECTIONS; l++) {
+                            if (places->place[k].connection[l] == places->place[i].id) {
+                                checkpoint++;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (checkpoint != 3) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool _evaluate_list_connection_2(const ListPlace *places) {
+    for (uint32_t i = 0; i < places->size; i++) {
+        for (uint32_t j = 0; j < MAX_CONNECTIONS - 1; j++) {
+            for (uint32_t k = j + 1; k < MAX_CONNECTIONS; k++) {
+                if (places->place[i].connection[j] != -1 &&
+                        places->place[i].connection[k] != -1 &&
+                        places->place[i].connection[j] == places->place[i].connection[k])
+                    return false;
+            }
+        }
+    }
+
+    return true;
 }
