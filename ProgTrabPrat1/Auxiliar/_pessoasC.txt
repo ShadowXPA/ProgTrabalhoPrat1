@@ -4,4 +4,4 @@ Tomas111   12   S
 PauloPires2   67    D   10
 LuisaSantos   40    D   3
 Zulmira2A    17 S
-PauloPires10       67    D 1
+PauloPires1       67    D 1
