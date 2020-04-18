@@ -33,9 +33,9 @@
 >typedef struct sala local, *plocal;
 >
 >struct sala {  
->&nbsp&nbspint id;         // id numérico do local  
->&nbsp&nbspint capacidade; // capacidade máxima  
->&nbsp&nbspint liga[3];    // id das ligações (-1 nos casos não usados)  
+>&nbsp;&nbsp;int id;         // id numérico do local  
+>&nbsp;&nbsp;int capacidade; // capacidade máxima  
+>&nbsp;&nbsp;int liga[3];    // id das ligações (-1 nos casos não usados)  
 >};
 
   No início da execução, o utilizador indica o nome do ficheiro onde se encontra a informação do espaço a usar. Antes de se iniciar a fase de simulação, esta informação é obrigatoriamente transferida para um vetor dinâmico de estruturas.
