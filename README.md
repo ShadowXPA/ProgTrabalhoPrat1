@@ -30,11 +30,11 @@
   Cada local tem um ID numérico positivo (único), uma capacidade máxima e algumas ligações diretas a outros locais. No máximo, cada local pode ter 3 ligações.
   Os possíveis espaços para realizar a simulação estão armazenados em ficheiros binários (1 ficheiro por espaço). Cada um destes ficheiros contém várias estruturas do tipo local, uma para cada um dos locais existentes nesse espaço:
 
->typedef struct sala local, *plocal;
->    struct sala {
->      int id;         // id numérico do local
->      int capacidade; // capacidade máxima
->      int liga[3];    // id das ligações (-1 nos casos não usados)
+>typedef struct sala local, *plocal;  
+>    struct sala {  
+>      int id;         // id numérico do local  
+>      int capacidade; // capacidade máxima  
+>      int liga[3];    // id das ligações (-1 nos casos não usados)  
 >    };
 
   No início da execução, o utilizador indica o nome do ficheiro onde se encontra a informação do espaço a usar. Antes de se iniciar a fase de simulação, esta informação é obrigatoriamente transferida para um vetor dinâmico de estruturas.
