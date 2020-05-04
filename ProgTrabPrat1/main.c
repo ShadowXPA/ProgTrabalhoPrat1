@@ -363,7 +363,7 @@ void transfering_people(ListPlace *places, Config *cfg, ListPerson *people) {
 
 void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people) {
     printf("\n----------------------\n Simulation stats\n----------------------\n");
-    printf("  Day: %d\n", cfg->days);
+    printf("  Day: %hu\n", cfg->days);
     printf("  Number of places: %d\n", places->size);
     printf("  Maximum capacity: %d\n", cfg->max_capacity);
     printf("  Number of people: %d\n", cfg->real_capacity);
@@ -375,23 +375,23 @@ void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people) {
     float percent_s = (((float) total_s) / cfg->real_capacity)*100.0f;
     char buffer[23];
     show_bar(buffer, percent_h);
-    printf("  Number of healthy people: %d\t(%.2f\%) \t%s\n", total_h, percent_h, buffer);
+    printf("  Number of healthy people: %d\t(%.2f%%) \t%s\n", total_h, percent_h, buffer);
     show_bar(buffer, percent_i);
-    printf("  Number of immune people: %d\t(%.2f\%) \t%s\n", total_i, percent_i, buffer);
+    printf("  Number of immune people: %d\t(%.2f%%) \t%s\n", total_i, percent_i, buffer);
     show_bar(buffer, percent_s);
-    printf("  Number of sick people: %d\t(%.2f\%) \t%s\n", total_s, percent_s, buffer);
+    printf("  Number of sick people: %d\t(%.2f%%) \t%s\n", total_s, percent_s, buffer);
     if (cfg->day_0_s == UINT16_MAX && total_s == 0) {
         cfg->day_0_s = cfg->days;
     } else if (cfg->day_0_s != UINT16_MAX && total_s != 0) {
         cfg->day_0_s = UINT16_MAX;
     }
-    printf("  Day of virus extinction: %d\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
+    printf("  Day of virus extinction: %hu\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
     if (cfg->peak_sick < total_s) {
         cfg->peak_sick = total_s;
         cfg->day_peak = cfg->days;
     }
     printf("  Peak number of people sick: %d\n", cfg->peak_sick);
-    printf("  Day of peak: %d\n", cfg->day_peak);
+    printf("  Day of peak: %hu\n", cfg->day_peak);
     printf("----------------------\n End\n----------------------\n\n");
 }
 
@@ -401,7 +401,7 @@ void show_max_stats(ListPlace *places, Config *cfg, ListPerson *people) {
 
 void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE *stream, const char *title) {
     fprintf(stream, "\n----------------------\n %s\n----------------------\n", title);
-    fprintf(stream, "  Day: %d\n", cfg->days);
+    fprintf(stream, "  Day: %hu\n", cfg->days);
     fprintf(stream, "  Number of places: %d\n", places->size);
     fprintf(stream, "  Maximum capacity: %d\n", cfg->max_capacity);
     fprintf(stream, "  Number of people: %d\n", cfg->real_capacity);
@@ -413,14 +413,14 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
     float percent_s = (((float) total_s) / cfg->real_capacity)*100.0f;
     char buffer[23];
     show_bar(buffer, percent_h);
-    fprintf(stream, "  Number of healthy people: %d\t(%.2f\%) \t%s\n", total_h, percent_h, buffer);
+    fprintf(stream, "  Number of healthy people: %d\t(%.2f%%) \t%s\n", total_h, percent_h, buffer);
     show_bar(buffer, percent_i);
-    fprintf(stream, "  Number of immune people: %d\t(%.2f\%) \t%s\n", total_i, percent_i, buffer);
+    fprintf(stream, "  Number of immune people: %d\t(%.2f%%) \t%s\n", total_i, percent_i, buffer);
     show_bar(buffer, percent_s);
-    fprintf(stream, "  Number of sick people: %d\t(%.2f\%) \t%s\n", total_s, percent_s, buffer);
-    fprintf(stream, "  Day of virus extinction: %d\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
+    fprintf(stream, "  Number of sick people: %d\t(%.2f%%) \t%s\n", total_s, percent_s, buffer);
+    fprintf(stream, "  Day of virus extinction: %hu\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
     fprintf(stream, "  Peak number of people sick: %d\n", cfg->peak_sick);
-    fprintf(stream, "  Day of peak: %d\n", cfg->day_peak);
+    fprintf(stream, "  Day of peak: %hu\n", cfg->day_peak);
     print_places___(places, stream, "Places");
     fprintf(stream, "\n");
 
