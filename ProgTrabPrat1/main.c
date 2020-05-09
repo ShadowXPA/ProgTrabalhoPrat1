@@ -9,22 +9,22 @@
  *
  */
 
-#include "Person.h"
+#include "Snapshot.h"
 
 #define MAX_FILENAME 256
 
-bool simulating(ListPlace *places, Config *cfg, ListPerson *people, ListPerson *discarded_people);
+bool simulating(ListPlace *places, Config *cfg, ListPerson **people, ListPerson *discarded_people, Snapshot **snap);
 void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people);
 void show_max_stats(ListPlace *places, Config *cfg, ListPerson *people);
 void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE *stream, const char *title);
 void show_bar(char *buf, int32_t percent);
 uint8_t print_menu();
-uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people);
+uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson **people, Snapshot **snap);
 void generate_reports(ListPlace *places, Config *cfg, ListPerson *people, ListPerson *discarded_people);
 void show_cmds();
 void step(ListPlace *places, Config *cfg, ListPerson *people);
 void spread_virus(ListPlace *places, ListPerson *people);
-void probability_recovery(ListPerson *people);
+void probability_recovery(ListPerson *people, Config *cfg);
 //void evaluate_if_recovered(ListPerson *people);
 void adding_people(ListPlace *places, Config *cfg, ListPerson *people);
 void transfering_people(ListPlace *places, Config *cfg, ListPerson *people);
@@ -44,6 +44,7 @@ int main(int argc, char *argv[], char **envp) {
     Config sim_cfg;
     ListPlace *places = NULL;
     ListPerson *people = NULL;
+    Snapshot *snap = NULL;
 
     // Get filenames
     if (argc == 3) {
@@ -111,53 +112,74 @@ int main(int argc, char *argv[], char **envp) {
     // Start Simulation
     printf("\n\n Initializing simulation...\n");
     printf("\n\n\n----------------------\n  Simulation start!\n----------------------\n");
-    while (simulating(places, &sim_cfg, people, people_discarded));
+    while (simulating(places, &sim_cfg, &people, people_discarded, &snap));
 
     free(sim_cfg.capacity);
     free_places(places);
     free_people(people);
     free_people(people_discarded);
+    free_snapshot(snap);
     return (EXIT_SUCCESS);
 }
 
-bool simulating(ListPlace *places, Config *cfg, ListPerson *people, ListPerson *discarded_people) {
+bool simulating(ListPlace *places, Config *cfg, ListPerson **people, ListPerson *discarded_people, Snapshot **snap) {
     uint8_t op = 0;
+    uint32_t N = 0;
+    char buffer[BUFFER_SIZE];
 
     // Show minimal statistics
-    show_min_stats(places, cfg, people);
+    show_min_stats(places, cfg, *people);
     // Show menu
     if (cfg->console_mode) {
-        op = console_mode(places, cfg, people);
+        op = console_mode(places, cfg, people, snap);
     } else {
         op = print_menu();
     }
 
     switch (op) {
-        case 7:
+        case 8:
             return false;
-        case 6:
+        case 7:
             // Generate reports
-            generate_reports(places, cfg, people, discarded_people);
+            generate_reports(places, cfg, *people, discarded_people);
             return false;
         case 1:
-            step(places, cfg, people);
+            // Save Snapshot before iterating
+            save_snapshot(snap, cfg, *people, places);
+            step(places, cfg, *people);
             break;
-        case 2:
-            show_max_stats(places, cfg, people);
+        case 2: {
+            uint32_t S = get_num_snapshot(*snap);
+            if (S > 0) {
+                printf(" Insert number of snapshots to go back (between 1 and %d):\n > ", S);
+                scanf("%[^\n]", buffer);
+                getchar();
+                N = atoi(buffer);
+                if (N > 0 && N <= S)
+                    load_snapshot(snap, N, people, cfg);
+                else
+                    printf(" Invalid number of snapshots...\n");
+            } else {
+                printf(" No snapshots yet...\n");
+            }
             break;
+        }
         case 3:
-            // Sub menu
-            // Add person
-            printf("\n");
-            adding_people(places, cfg, people);
+            show_max_stats(places, cfg, *people);
             break;
         case 4:
             // Sub menu
-            // Transfer people
+            // Add person
             printf("\n");
-            transfering_people(places, cfg, people);
+            adding_people(places, cfg, *people);
             break;
         case 5:
+            // Sub menu
+            // Transfer people
+            printf("\n");
+            transfering_people(places, cfg, *people);
+            break;
+        case 6:
             // Toggle console mode
             cfg->console_mode = !cfg->console_mode;
             break;
@@ -184,16 +206,16 @@ void generate_reports(ListPlace *places, Config *cfg, ListPerson *people, ListPe
         printf(" Could not open '%s'...\n Report not created!\n", filename);
     } else {
         ListPerson *current = people;
-        
+
         while (current != NULL) {
-            fprintf(peo, "%s %d %c", current->person.id, current->person.age, current->person.status);
+            fprintf(peo, "%s %d %c", current->person.id, REAL_AGE(current->person.age, cfg->days), current->person.status);
             if (current->person.status == 'D')
                 fprintf(peo, " %d", current->person.days);
             fprintf(peo, "\n");
             current = current->next;
         }
-//        print_people___(people, peo, "People who were part of the simulation");
-//        print_people___(discarded_people, peo, "People who were not part of the simulation");
+        //        print_people___(people, peo, "People who were part of the simulation");
+        //        print_people___(discarded_people, peo, "People who were not part of the simulation");
         fclose(peo);
     }
     time_t unixT = time(NULL);
@@ -228,8 +250,8 @@ void adding_people(ListPlace *places, Config *cfg, ListPerson *people) {
     do {
         printf(" (1) - Place ID: %d\n", place_id);
         printf(" (2) - Person ID: '%s'\n", p.id);
-        printf(" (3) - Person Age: %d\n", p.age);
-        printf(" (4) - Days sick: %d\n", p.days);
+        printf(" (3) - Person Age: %hhu\n", p.age);
+        printf(" (4) - Days sick: %hu\n", p.days);
         printf(" (5) - Confirm\n");
         printf(" (6) - Cancel\n\n");
         do {
@@ -317,21 +339,21 @@ void transfering_people(ListPlace *places, Config *cfg, ListPerson *people) {
         switch (op) {
             case 1:
                 // Ask for Place ID
-                printf("\n Input Place ID:\n > ");
+                printf("\n Input number of people:\n > ");
                 scanf("%[^\n]", buffer);
                 getchar();
                 N = atoi(buffer);
                 break;
             case 2:
                 // Ask for source place ID
-                printf("\n Input Person ID:\n > ");
+                printf("\n Input source place ID:\n > ");
                 scanf("%[^\n]", buffer);
                 getchar();
                 place_id_src = atoi(buffer);
                 break;
             case 3:
                 // Ask for destination place ID
-                printf("\n Input Person age:\n > ");
+                printf("\n Input destination place ID:\n > ");
                 scanf("%[^\n]", buffer);
                 getchar();
                 place_id_dest = atoi(buffer);
@@ -385,7 +407,7 @@ void show_min_stats(ListPlace *places, Config *cfg, ListPerson *people) {
     } else if (cfg->day_0_s != UINT16_MAX && total_s != 0) {
         cfg->day_0_s = UINT16_MAX;
     }
-    printf("  Day of virus extinction: %hu\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
+    printf("  Day of virus extinction: %d\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
     if (cfg->peak_sick < total_s) {
         cfg->peak_sick = total_s;
         cfg->day_peak = cfg->days;
@@ -418,7 +440,7 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
     fprintf(stream, "  Number of immune people: %d\t(%.2f%%) \t%s\n", total_i, percent_i, buffer);
     show_bar(buffer, percent_s);
     fprintf(stream, "  Number of sick people: %d\t(%.2f%%) \t%s\n", total_s, percent_s, buffer);
-    fprintf(stream, "  Day of virus extinction: %hu\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
+    fprintf(stream, "  Day of virus extinction: %d\n", cfg->day_0_s == UINT16_MAX ? -1 : cfg->day_0_s);
     fprintf(stream, "  Peak number of people sick: %d\n", cfg->peak_sick);
     fprintf(stream, "  Day of peak: %hu\n", cfg->day_peak);
     print_places___(places, stream, "Places");
@@ -436,7 +458,7 @@ void show_max_stats___(ListPlace *places, Config *cfg, ListPerson *people, FILE 
         Person **bucket_people = get_people_room(people, &places->place[i], total_place);
         for (int j = 0; j < total_place && bucket_people != NULL; j++) {
             fprintf(stream, "    Person: '%s' - Age: %d - Status: '%c' - Days since infected: %d\n",
-                    bucket_people[j]->id, bucket_people[j]->age, bucket_people[j]->status, bucket_people[j]->days);
+                    bucket_people[j]->id, REAL_AGE(bucket_people[j]->age, cfg->days), bucket_people[j]->status, bucket_people[j]->days);
         }
         fprintf(stream, "\n");
         free(bucket_people);
@@ -465,23 +487,24 @@ uint8_t print_menu() {
     uint8_t op = 0;
     char buffer[BUFFER_SIZE];
     printf(" (1) - Next day (Advance 1 iteration)\n");
-    printf(" (2) - Show full statistics\n");
-    printf(" (3) - Add sick person\n");
-    printf(" (4) - Transfer people\n");
-    printf(" (5) - Switch (Console mode)\n");
-    printf(" (6) - End simulation\n");
-    printf(" (7) - Interrupt (End simulation without report)\n\n");
+    printf(" (2) - Revert (Go back N iterations)\n");
+    printf(" (3) - Show full statistics\n");
+    printf(" (4) - Add sick person\n");
+    printf(" (5) - Transfer people\n");
+    printf(" (6) - Switch (Console mode)\n");
+    printf(" (7) - End simulation\n");
+    printf(" (8) - Interrupt (End simulation without report)\n\n");
     do {
         printf(" > ");
         scanf("%[^\n]", buffer);
         getchar();
         op = atoi(buffer);
-    } while (op < 1 || op > 7);
+    } while (op < 1 || op > 8);
 
     return op;
 }
 
-uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
+uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson **people, Snapshot **snap) {
     uint8_t op = 0;
     char buffer[BUFFER_SIZE], *token;
     const char s[4] = " \t\n";
@@ -499,19 +522,19 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                 op = 1;
             } else if (strncmp("show", token, BUFFER_SIZE) == 0 ||
                     strncmp("stats", token, BUFFER_SIZE) == 0) {
-                op = 2;
+                op = 3;
             } else if (strncmp("switch", token, BUFFER_SIZE) == 0 ||
                     strncmp("console", token, BUFFER_SIZE) == 0 ||
                     strncmp("cmd", token, BUFFER_SIZE) == 0) {
-                op = 5;
+                op = 6;
             } else if (strncmp("end", token, BUFFER_SIZE) == 0 ||
                     strncmp("terminate", token, BUFFER_SIZE) == 0 ||
                     strncmp("exit", token, BUFFER_SIZE) == 0) {
-                op = 6;
+                op = 7;
             } else if (strncmp("kill", token, BUFFER_SIZE) == 0 ||
                     strncmp("int", token, BUFFER_SIZE) == 0 ||
                     strncmp("interrupt", token, BUFFER_SIZE) == 0) {
-                op = 7;
+                op = 8;
             } else if (strncmp("add", token, BUFFER_SIZE) == 0) {
                 bool completed = false;
                 token = strtok(NULL, s);
@@ -533,7 +556,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                                 p.status = SICK;
                                 p.days = person_days;
                                 p.place = NULL;
-                                if (try_add_person(places, cfg, people, &p, place_id)) {
+                                if (try_add_person(places, cfg, *people, &p, place_id)) {
                                     printf(" Person '%s' added.\n", p.id);
                                     completed = true;
                                     return 22;
@@ -556,7 +579,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                         token = strtok(NULL, s);
                         if (token != NULL) {
                             int32_t place_id_dest = atoi(token);
-                            if (try_move_people(places, cfg, people, N, place_id_src, place_id_dest)) {
+                            if (try_move_people(places, cfg, *people, N, place_id_src, place_id_dest)) {
                                 printf(" %d %s transferred from %d to %d.\n", N, N == 1 ? "person was" : "people were", place_id_src, place_id_dest);
                                 completed = true;
                                 return 22;
@@ -566,6 +589,22 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson *people) {
                 }
                 if (!completed) {
                     printf(" Error completing command...\n Make sure you are typing the command correctly!\n");
+                }
+            } else if (strncmp("undo", token, BUFFER_SIZE) == 0 ||
+                    strncmp("prev", token, BUFFER_SIZE) == 0) {
+                token = strtok(NULL, s);
+                if (token != NULL) {
+                    int32_t N = atoi(token);
+                    uint32_t S = get_num_snapshot(*snap);
+                    if (S > 0)
+                        if (N > 0 && N <= S) {
+                            load_snapshot(snap, N, people, cfg);
+                            return 22;
+                        } else {
+                            printf(" Number of iterations invalid!\n");
+                        }
+                    else
+                        printf(" Invalid number of iterations...\n");
                 }
             } else {
                 printf(" Unknown command...\n");
@@ -657,6 +696,7 @@ bool try_move_people(ListPlace *places, Config *cfg, ListPerson *people, const i
 void show_cmds() {
     printf("Here's a list of all commands currently available:\n\n");
     printf("\tstep | next\n\t\t Advances 1 day (iteration).\n\n");
+    printf("\tundo | prev\n\t\t Reverts N days (iterations).\n\n");
     printf("\tshow | stats\n\t\t Shows full list of statistics.\n\n");
     printf("\tadd [place_id] [person_id] [person_age] [days_sick]\n\t\t Add a new sick person.\n\n");
     printf("\tmove [N] [place_src] [place_dest]\n\t\t Moves [N] people around randomly as long as the [place_src] and [place_dest] are connected.\n\n");
@@ -674,7 +714,7 @@ void step(ListPlace *places, Config *cfg, ListPerson *people) {
     // Spread virus
     spread_virus(places, people);
     // Probability of recovery
-    probability_recovery(people);
+    probability_recovery(people, cfg);
     // Maximum duration of infection
     //evaluate_if_recovered(people);
 }
@@ -706,18 +746,18 @@ void spread_virus(ListPlace *places, ListPerson *people) {
     //print_people(people);
 }
 
-void probability_recovery(ListPerson *people) {
+void probability_recovery(ListPerson *people, Config *cfg) {
     ListPerson *current = people;
 
     while (current != NULL) {
         if (current->person.status == SICK) {
             // Calculate probability!
-            if (probEvento(PROB_RECOVERY(current->person.age))) {
-                current->person.days = INF_MAX_DUR(current->person.age);
+            if (probEvento(PROB_RECOVERY(REAL_AGE(current->person.age, cfg->days)))) {
+                current->person.days = INF_MAX_DUR(REAL_AGE(current->person.age, cfg->days));
             }
 
             // Evaluate_if_recovered
-            if (current->person.days >= INF_MAX_DUR(current->person.age)) {
+            if (current->person.days >= INF_MAX_DUR(REAL_AGE(current->person.age, cfg->days))) {
                 // Calculate probability!
                 if (probEvento(IMMUNITY_RATE)) {
                     current->person.status = IMMUNE;
