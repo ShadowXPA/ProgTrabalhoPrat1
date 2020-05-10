@@ -610,7 +610,7 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson **people, Snapsh
                 printf(" Unknown command...\n");
             }
         }
-    } while (op < 1 || op > 7);
+    } while (op < 1 || op > 8);
 
     return op;
 }
@@ -696,7 +696,7 @@ bool try_move_people(ListPlace *places, Config *cfg, ListPerson *people, const i
 void show_cmds() {
     printf("Here's a list of all commands currently available:\n\n");
     printf("\tstep | next\n\t\t Advances 1 day (iteration).\n\n");
-    printf("\tundo | prev\n\t\t Reverts N days (iterations).\n\n");
+    printf("\tundo [N] | prev [N]\n\t\t Reverts [N] days (iterations).\n\n");
     printf("\tshow | stats\n\t\t Shows full list of statistics.\n\n");
     printf("\tadd [place_id] [person_id] [person_age] [days_sick]\n\t\t Add a new sick person.\n\n");
     printf("\tmove [N] [place_src] [place_dest]\n\t\t Moves [N] people around randomly as long as the [place_src] and [place_dest] are connected.\n\n");
