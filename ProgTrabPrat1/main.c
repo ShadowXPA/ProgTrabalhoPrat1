@@ -605,6 +605,8 @@ uint8_t console_mode(ListPlace *places, Config *cfg, ListPerson **people, Snapsh
                         }
                     else
                         printf(" Invalid number of iterations...\n");
+                } else {
+                    printf(" Incomplete command...\n Make sure you are typing the command correctly!\n");
                 }
             } else {
                 printf(" Unknown command...\n");
