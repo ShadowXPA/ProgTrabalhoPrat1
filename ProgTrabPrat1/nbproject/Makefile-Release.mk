@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Person.o \
 	${OBJECTDIR}/Place.o \
+	${OBJECTDIR}/Snapshot.o \
 	${OBJECTDIR}/config.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils.o
@@ -75,6 +76,11 @@ ${OBJECTDIR}/Place.o: Place.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Place.o Place.c
+
+${OBJECTDIR}/Snapshot.o: Snapshot.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -std=c99 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Snapshot.o Snapshot.c
 
 ${OBJECTDIR}/config.o: config.c
 	${MKDIR} -p ${OBJECTDIR}

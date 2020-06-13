@@ -32,6 +32,14 @@
  * of infection has passed or recovery rate
  */
 #define IMMUNITY_RATE 0.2f
+/* How many days are in a year
+ * (A year has 365.25 days so for simplicity a year has 365 days)
+ */
+#define DAYS_IN_YEAR 365
+/* If each iteration is a day... then after DAYS_IN_YEAR iterations
+ * the person's age must've changed...
+ */
+#define REAL_AGE(age, days) (age + (int)(days/DAYS_IN_YEAR))
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>Person.h</itemPath>
       <itemPath>Place.h</itemPath>
+      <itemPath>Snapshot.h</itemPath>
       <itemPath>config.h</itemPath>
       <itemPath>utils.h</itemPath>
     </logicalFolder>
@@ -18,6 +19,7 @@
                    projectFiles="true">
       <itemPath>Person.c</itemPath>
       <itemPath>Place.c</itemPath>
+      <itemPath>Snapshot.c</itemPath>
       <itemPath>config.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>utils.c</itemPath>
@@ -55,6 +57,10 @@
       <item path="Place.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Place.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Snapshot.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Snapshot.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="config.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -95,6 +101,10 @@
       <item path="Place.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Place.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Snapshot.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Snapshot.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="config.c" ex="false" tool="0" flavor2="0">
       </item>
